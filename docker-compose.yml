@@ -1,0 +1,23 @@
+services:
+  main_bot:
+    build:
+      context: .
+    env_file:
+      - env/main.env
+    restart: on-failure
+    volumes:
+      - ./bot:/bot
+    depends_on:
+      - postgres_main
+
+  postgres_main:
+    image: postgres:16.2
+    container_name: my_postgres
+    env_file:
+      - env/postgres.env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
+
