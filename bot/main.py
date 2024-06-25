@@ -11,7 +11,6 @@ from bot_instance import bot
 
 # https://github.com/shichchirtch/Election_2020_KO.git
 
-#  6471784185:AAEWakBbPrU-bKGGanxahUq__ZbyZ1s8dBI
 
 # Функция конфигурирования и запуска бота
 async def main():
