@@ -8,7 +8,8 @@ from external_functions import (edit_repeat_text_window, check_user_in_table,
                                 go_back_to_beginning,
                                 set_new_page,
                                 check_bookmarks,
-                                edit_help_window)
+                                edit_help_window,
+                                continue_window)
 
 from inline_keyboard import create_pagination_keyboard
 from bookmark_kb import create_bookmarks_keyboard
@@ -60,13 +61,7 @@ async def before_start(message:Message):
     await asyncio.sleep(4)
     await prestart_ant.delete()
 
-# @command_router.message(Command(commands='help'))
-# async def process_help_command(message: Message):
-#     print('help works')
-#     help_ant = await message.answer(text=LEXICON['/help'])
-#     await message.delete()
-#     await asyncio.sleep(7)
-#     await help_ant.delete()
+
 
 @command_router.message(Command(commands='help'))
 async def process_help_command(message: Message):
@@ -86,6 +81,15 @@ async def process_continue_command(message: Message):
     cont_ant = await message.answer("Продолжаем чтение")
     await message.delete()
     await asyncio.sleep(2)
+    await cont_ant.delete()
+
+@command_router.message(Command(commands='continue'))
+async def process_continue_command(message: Message):
+    user_id = message.from_user.id
+    cont_ant = await message.answer("Продолжаем чтение")
+    await continue_window(message, user_id)
+    await message.delete()
+    await asyncio.sleep(1)
     await cont_ant.delete()
 
 
