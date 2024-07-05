@@ -41,7 +41,7 @@ async def main():
     dp.startup.register(set_main_menu)
 
     await set_main_menu(bot)
-    dp = Dispatcher()
+
     dp.include_router(command_router)
     dp.include_router(lese_router)
 

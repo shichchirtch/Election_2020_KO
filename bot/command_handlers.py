@@ -7,7 +7,8 @@ from external_functions import (edit_repeat_text_window, check_user_in_table,
                                 insert_new_page_in_modified_pagina,
                                 go_back_to_beginning,
                                 set_new_page,
-                                check_bookmarks)
+                                check_bookmarks,
+                                edit_help_window)
 
 from inline_keyboard import create_pagination_keyboard
 from bookmark_kb import create_bookmarks_keyboard
@@ -19,6 +20,11 @@ from aiogram.exceptions import TelegramBadRequest
 
 command_router = Router()
 
+
+# @command_router.message()
+# async  def return_id_foto(message:Message):
+#     await message.answer(text='start')
+#     print(message.photo[-1].file_id)
 
 @command_router.message(~F.text)
 async def delete_not_text_type_messages(message:Message):
@@ -54,13 +60,19 @@ async def before_start(message:Message):
     await asyncio.sleep(4)
     await prestart_ant.delete()
 
+# @command_router.message(Command(commands='help'))
+# async def process_help_command(message: Message):
+#     print('help works')
+#     help_ant = await message.answer(text=LEXICON['/help'])
+#     await message.delete()
+#     await asyncio.sleep(7)
+#     await help_ant.delete()
+
 @command_router.message(Command(commands='help'))
 async def process_help_command(message: Message):
     print('help works')
-    help_ant = await message.answer(text=LEXICON['/help'])
+    await edit_help_window(message)  # First usage
     await message.delete()
-    await asyncio.sleep(7)
-    await help_ant.delete()
 
 
 @command_router.message(Command(commands='beginning'))

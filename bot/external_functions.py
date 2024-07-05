@@ -2,7 +2,7 @@ from bot_base import session_marker, User
 from sqlalchemy import select
 from aiogram.types import Message, InputMediaPhoto
 from inline_keyboard import create_pagination_keyboard
-from pagination import pagin_dict
+from pagination import pagin_dict, help_command
 from bot_instance import bot
 import json
 
@@ -13,25 +13,19 @@ async def edit_repeat_text_window(message:Message):
     user_tg_id = message.from_user.id
     async with session_marker() as session:
         query = await session.execute(select(User).filter(User.tg_us_id == user_tg_id))
-        # print('query =', query)
         needed_data = query.scalar()
         current_index = needed_data.page
         list_modified_pagins = needed_data.modified_pagina
         needed_message = list_modified_pagins.pop()
-
         return_to_message = Message(**json.loads(needed_message))
-        print('type return_to_message = ', type(return_to_message), '\n\n', return_to_message)
-        # связываю с ботом
         valid_with_bot_msg = Message.model_validate(return_to_message).as_(bot)
-
         modified_pag = await valid_with_bot_msg.edit_media(
             media=InputMediaPhoto(
                 media=pagin_dict[current_index][0], caption=pagin_dict[current_index][1]),
             reply_markup=create_pagination_keyboard(current_index)
         )
-        str_modified_pag = modified_pag.model_dump_json(
-            exclude_none=True
-        )
+        str_modified_pag = modified_pag.model_dump_json(exclude_none=True)
+
         needed_data.modified_pagina = list_modified_pagins + [str_modified_pag]
         await session.commit()
 
@@ -169,3 +163,22 @@ async def remove_bookmark(user_id:int, del_index:int):
         needed_data.bookmarks = temp_arr
         await session.commit()
 
+async def edit_help_window(message: Message):
+    """Эта асинхронная функция редактирует открытую прежде страницу в страницу help"""
+    print("edit HELP FUNC WORKS")
+    user_id = message.from_user.id
+    async with session_marker() as session:
+        query = await session.execute(select(User).filter(User.tg_us_id == user_id))
+        needed_data = query.scalar()
+        list_modified_pagins = needed_data.modified_pagina
+        needed_message = list_modified_pagins.pop()
+        return_to_message = Message(**json.loads(needed_message))
+        msg = Message.model_validate(return_to_message).as_(bot)
+        att = await message.answer_photo(
+            photo=help_command[0],
+            caption=help_command[1],
+            reply_markup=None)
+        str_att = att.model_dump_json(exclude_none=True)
+        needed_data.modified_pagina = list_modified_pagins + [str_att]
+        await msg.delete()
+        await session.commit()

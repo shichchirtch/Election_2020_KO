@@ -1,3 +1,16 @@
+
+
+help_command =('AgACAgIAAxkBAAIBA2aHN38W4lRKL0303xm2lRnln1JEAAIt3DEbFqE5SPqWlYpzs-xMAQADAgADeQADNQQ',
+               '<b>Как пользоваться Ботом</b>\n\n'
+             'Доступные команды:\n\n'
+             '/beginning - перейти в начало книги\n'
+             '/continue - продолжить чтение\n'
+             '/bookmarks - посмотреть список закладок\n'
+             '/help - справка по работе бота\n\n'
+             'Чтобы сохранить закладку - нажмите на кнопку с номером страницы\n\n'
+             '<b>Приятного чтения!</b>')
+
+
 pagin_dict = {
 
     1: ('AgACAgIAAxkBAAMHZnsi-3fNKo1aRzqml6nDfRIOegUAAmfiMRufp9hLO9KHJsaUFWUBAAMCAAN5AAM1BA',
