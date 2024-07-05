@@ -78,13 +78,6 @@ async def process_beginning_command(message: Message):
 
 @command_router.message(Command(commands='continue'))
 async def process_continue_command(message: Message):
-    cont_ant = await message.answer("Продолжаем чтение")
-    await message.delete()
-    await asyncio.sleep(2)
-    await cont_ant.delete()
-
-@command_router.message(Command(commands='continue'))
-async def process_continue_command(message: Message):
     user_id = message.from_user.id
     cont_ant = await message.answer("Продолжаем чтение")
     await continue_window(message, user_id)
