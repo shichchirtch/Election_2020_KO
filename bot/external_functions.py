@@ -187,8 +187,9 @@ async def continue_window(message, user_id):
     async with session_marker() as session:
         query = await session.execute(select(User).filter(User.tg_us_id == user_id))
         needed_data = query.scalar()
-        last_message = needed_data.modified_pagina
-        return_to_message = Message(**json.loads(last_message))
+        list_modified_pagins = needed_data.modified_pagina
+        needed_message = list_modified_pagins.pop()
+        return_to_message = Message(**json.loads(needed_message))
         page_index = needed_data.page
         msg = Message.model_validate(return_to_message).as_(bot)
         att = await message.answer_photo(
@@ -196,6 +197,6 @@ async def continue_window(message, user_id):
             caption=pagin_dict[page_index][1],
             reply_markup=create_pagination_keyboard(page_index))
         json_att = att.model_dump_json(exclude_none=True)
-        needed_data.modified_pagina = json_att
+        needed_data.modified_pagina = list_modified_pagins + [json_att]
         await msg.delete()
         await session.commit()
